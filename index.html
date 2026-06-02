@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Genome Insight Lab</title>
+    <link rel="stylesheet" href="assets/styles.css">
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Bioinformatics analytics app</p>
+        <h1>Genome Insight Lab</h1>
+      </div>
+      <nav aria-label="App sections">
+        <a href="#sequence">Sequence</a>
+        <a href="#variants">Variants</a>
+        <a href="#expression">Expression</a>
+        <a href="#learn">Learn</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="eyebrow">Medical genomics, made practical</p>
+          <h2 id="hero-title">Analyze DNA, reason about variants, and connect molecular signals to research questions.</h2>
+          <p>
+            Paste a FASTA sequence, inspect open reading frames, explore mutations, and compare disease-linked gene expression patterns in one clean learning bench.
+          </p>
+          <div class="hero-actions">
+            <button id="loadDemo" class="primary" type="button">Load demo dataset</button>
+            <button id="clearAll" class="secondary" type="button">Reset workspace</button>
+          </div>
+        </div>
+        <div class="helix-panel" aria-label="Stylized DNA data visualization">
+          <canvas id="helixCanvas" width="640" height="420"></canvas>
+        </div>
+      </section>
+
+      <section id="sequence" class="band">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Module 1</p>
+            <h2>Sequence Analyzer</h2>
+          </div>
+          <p>Clean FASTA input, calculate GC content, translate coding regions, and find candidate ORFs.</p>
+        </div>
+
+        <div class="analysis-grid">
+          <form class="workspace" id="sequenceForm">
+            <label for="sequenceInput">FASTA or raw DNA sequence</label>
+            <textarea id="sequenceInput" spellcheck="false" placeholder="Paste a DNA sequence here..."></textarea>
+            <div class="toolbar">
+              <button class="primary" type="submit">Analyze sequence</button>
+              <button class="secondary" id="sampleSequence" type="button">Use BRCA1 exon sample</button>
+            </div>
+            <p class="note">Educational use only. This app does not diagnose disease or replace validated clinical pipelines.</p>
+          </form>
+
+          <aside class="metric-panel" aria-label="Sequence summary">
+            <div class="metric">
+              <span>Length</span>
+              <strong id="seqLength">0 bp</strong>
+            </div>
+            <div class="metric">
+              <span>GC content</span>
+              <strong id="gcContent">0%</strong>
+            </div>
+            <div class="metric">
+              <span>Longest ORF</span>
+              <strong id="longestOrf">0 aa</strong>
+            </div>
+            <div class="metric">
+              <span>CpG observed / expected</span>
+              <strong id="cpgRatio">0.00</strong>
+            </div>
+          </aside>
+        </div>
+
+        <div class="split">
+          <div class="panel">
+            <div class="panel-title">
+              <h3>Nucleotide Composition</h3>
+              <span id="qualityFlag">Waiting for input</span>
+            </div>
+            <canvas id="compositionChart" width="620" height="300"></canvas>
+          </div>
+          <div class="panel">
+            <div class="panel-title">
+              <h3>Candidate ORFs</h3>
+              <span>Start-to-stop frames</span>
+            </div>
+            <div id="orfList" class="list empty">No ORFs yet.</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="variants" class="band">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Module 2</p>
+            <h2>Variant Reasoner</h2>
+          </div>
+          <p>Enter a point mutation and see the codon-level effect, amino acid change, and research interpretation.</p>
+        </div>
+
+        <div class="variant-grid">
+          <form id="variantForm" class="workspace compact">
+            <label for="variantPosition">Position in current sequence</label>
+            <input id="variantPosition" type="number" min="1" value="31">
+            <label for="variantBase">Alternate base</label>
+            <select id="variantBase">
+              <option>A</option>
+              <option>C</option>
+              <option>G</option>
+              <option>T</option>
+            </select>
+            <button class="primary" type="submit">Interpret mutation</button>
+          </form>
+
+          <div id="variantResult" class="result-card">
+            <h3>No variant interpreted yet</h3>
+            <p>Analyze a sequence, then enter a genomic position and alternate base.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="expression" class="band">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Module 3</p>
+            <h2>Expression Explorer</h2>
+          </div>
+          <p>Compare illustrative tumor and normal expression values for genes frequently discussed in cancer biology.</p>
+        </div>
+
+        <div class="expression-wrap">
+          <div class="panel table-panel">
+            <div class="panel-title">
+              <h3>Differential Expression</h3>
+              <span>log2 fold change</span>
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th>Gene</th>
+                  <th>Normal</th>
+                  <th>Tumor</th>
+                  <th>log2FC</th>
+                  <th>Signal</th>
+                </tr>
+              </thead>
+              <tbody id="expressionTable"></tbody>
+            </table>
+          </div>
+          <div class="panel">
+            <div class="panel-title">
+              <h3>Expression Heatmap</h3>
+              <span>Relative intensity</span>
+            </div>
+            <div id="heatmap" class="heatmap"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="learn" class="band">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Learning map</p>
+            <h2>What This Teaches</h2>
+          </div>
+          <p>Each result links an analysis step to why it matters in medical research.</p>
+        </div>
+
+        <div class="learning-grid">
+          <article>
+            <h3>GC Content</h3>
+            <p>GC-rich regions can affect sequencing coverage, PCR behavior, and gene regulation. Extreme values are a useful first quality signal.</p>
+          </article>
+          <article>
+            <h3>ORFs and Translation</h3>
+            <p>Open reading frames help identify protein-coding potential and show how nucleotide changes can alter amino acid sequences.</p>
+          </article>
+          <article>
+            <h3>Variant Effect</h3>
+            <p>Missense, nonsense, and silent changes are basic categories used before deeper annotation with population frequency and clinical evidence.</p>
+          </article>
+          <article>
+            <h3>Expression</h3>
+            <p>Differential expression helps researchers find genes and pathways that behave differently between disease and control samples.</p>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>Genome Insight Lab is an educational portfolio project for learning bioinformatics concepts used in modern medical research.</p>
+    </footer>
+
+    <script src="assets/app.js"></script>
+  </body>
+</html>

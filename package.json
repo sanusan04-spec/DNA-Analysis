@@ -1,0 +1,21 @@
+{
+  "name": "genome-insight-lab",
+  "version": "1.0.0",
+  "description": "A portfolio-ready bioinformatics analytics app for learning medical genomics concepts.",
+  "private": false,
+  "scripts": {
+    "start": "python3 -m http.server 4173",
+    "test": "node --check assets/app.js && node tests/project-smoke.test.js"
+  },
+  "keywords": [
+    "bioinformatics",
+    "genomics",
+    "medical-research",
+    "dna",
+    "variants",
+    "gene-expression",
+    "portfolio"
+  ],
+  "author": "Saniyah Sankeshwarkar",
+  "license": "MIT"
+}
